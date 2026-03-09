@@ -1,8 +1,12 @@
 
 using ExoCrud.DevenirDev2.Controllers;
 using ExoCrud.DevenirDev2.Data;
+using ExoCrud.DevenirDev2.Repository.AuthServices;
 using ExoCrud.DevenirDev2.Repository.CarServices;
+using ExoCrud.DevenirDev2.Repository.UserServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Net;
 using System.Text;
@@ -47,6 +51,28 @@ namespace ExoCrud.DevenirDev2
 
 
             builder.Services.AddScoped<ICarService,CarService>();
+            builder.Services.AddScoped<IUserService,UserService>();
+            builder.Services.AddScoped<IAuthService,AuthService>();
+
+            // Configuration JWT 
+            // Recuperation de la clé secrète du fichier appsettings.json
+            var secretKey = builder.Configuration["Jwt:SecretKey"];
+
+            // Configuration de l'authentification JWT
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        
+                    };
+                }
+                );
+
 
 
 
