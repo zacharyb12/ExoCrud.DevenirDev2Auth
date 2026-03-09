@@ -49,11 +49,10 @@ namespace ExoCrud.DevenirDev2.Controllers
 
             return Ok(response);
         }
-
-
        
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [Route("/")]
         public ActionResult<bool> CreateCar([FromBody] CreateCarDTO newCar)
         {
@@ -73,6 +72,7 @@ namespace ExoCrud.DevenirDev2.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [Route("/")]
         public ActionResult<bool> UpdateCar([FromBody] UpdateCarDTO updatedCar, Guid id)
         {
@@ -100,6 +100,7 @@ namespace ExoCrud.DevenirDev2.Controllers
 
 
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [Route("/{id:guid}")]
         public ActionResult<bool> DeleteCar(Guid id)
         {

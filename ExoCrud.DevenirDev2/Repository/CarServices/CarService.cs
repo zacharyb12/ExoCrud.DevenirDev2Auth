@@ -32,7 +32,8 @@ namespace ExoCrud.DevenirDev2.Repository.CarServices
                 Brand = newCar.Brand,
                 Model = newCar.Model,
                 Horses = newCar.Horses,
-                Color = newCar.Color
+                Color = newCar.Color,
+                UserId = newCar.UserId
             };
 
             var carAdded = _context.Cars.Add(carToAdd);

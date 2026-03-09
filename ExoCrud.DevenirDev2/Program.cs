@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Net;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace ExoCrud.DevenirDev2
 {
@@ -68,12 +69,28 @@ namespace ExoCrud.DevenirDev2
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        
+
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+
+                        // Verifie le role
+                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+
+
                     };
                 }
                 );
 
+            builder.Services.AddAuthorization();
 
+            // Permet d'eviter les risques d'un appel circulaires entre modèles
+            // Extra
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler =
+                    System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                });
 
 
             var app = builder.Build();
@@ -87,6 +104,8 @@ namespace ExoCrud.DevenirDev2
 
             app.UseHttpsRedirection();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

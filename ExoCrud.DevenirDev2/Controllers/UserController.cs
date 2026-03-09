@@ -12,6 +12,7 @@ namespace ExoCrud.DevenirDev2.Controllers
     public class UserController(IUserService _service) : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         [Route("/{id:guid}")]
         public ActionResult GetById(Guid id)
         {
@@ -32,6 +33,7 @@ namespace ExoCrud.DevenirDev2.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [Route("/update/{id:guid}")]
         public ActionResult UpdateUser(Guid id , UserUpdateDTO userUpdated)
         {
@@ -55,6 +57,7 @@ namespace ExoCrud.DevenirDev2.Controllers
 
 
         [HttpDelete]
+        [Authorize]
         [Route("/delete/{id:guid}")]
         public ActionResult DeleteUser(Guid id)
         {
